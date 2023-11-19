@@ -20,7 +20,22 @@ class KnightsTravails {
     }
 
     moveKnight(coordStart, coordEnd) {
-        
+       let queue = [coordStart];
+       let stepCount = 0;
+       
+       while(queue.length != 0) {
+            if((queue[0][0] == coordEnd[0]) && (queue[0][1] == coordEnd[1])) return stepCount;
+
+            this.board[queue[0][0]][queue[0][1]].forEach(vertex => {
+                console.log(vertex);
+                if((vertex[0] != queue[0][0]) && (vertex[1] != queue[0][1])) queue.push(vertex);
+            });
+
+            queue.shift();
+            stepCount++;
+       }
+
+       return null;
     }
 
     #buildList() {
@@ -35,11 +50,8 @@ class KnightsTravails {
 
                     if (this.canMove(nextStepCoord)) this.board[i][j].push(nextStepCoord);
                 });
-                // console.log(this.board[i][j]);
             }
         }
-
-        // console.log(`Counter: ${counter}`);
     }
 
     canMove(coord) {
