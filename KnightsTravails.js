@@ -1,3 +1,5 @@
+import Knight from "./Knight.js";
+
 class KnightsTravails {
     #boardHeight = 7;
     #boardWidth = 7;
@@ -20,26 +22,28 @@ class KnightsTravails {
     }
 
     moveKnight(coordStart, coordEnd) {
-       let queue = [coordStart];
-       let stepCount = 0;
-       
-       while(queue.length != 0) {
-            if((queue[0][0] == coordEnd[0]) && (queue[0][1] == coordEnd[1])) return stepCount;
+        let queue = [new Knight(coordStart, [[coordStart[0], coordStart[1]]])];
+        let stepCount = 0;
 
-            this.board[queue[0][0]][queue[0][1]].forEach(vertex => {
+        while (queue.length != 0) {
+            if ((queue[0].current[0] == coordEnd[0]) && (queue[0].current[1] == coordEnd[1])) return queue[0].history;
+
+            this.board[queue[0].current[0]][queue[0].current[1]].forEach(vertex => {
                 console.log(vertex);
-                if((vertex[0] != queue[0][0]) && (vertex[1] != queue[0][1])) queue.push(vertex);
+
+                if ((vertex[0] != queue[0].current[0]) && (vertex[1] != queue[0].current[1])) queue.push(new Knight(vertex, queue[0].push(vertex)));
             });
 
             queue.shift();
             stepCount++;
-       }
+        }
 
-       return null;
+        return null;
     }
 
     #buildList() {
         let counter = 0;
+        let trace = "";
 
         for (let i = 0; i <= 7; i++) {
             for (let j = 0; j <= 7; j++) {
