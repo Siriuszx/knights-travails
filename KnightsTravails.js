@@ -1,9 +1,7 @@
 class KnightsTravails {
     #stepDirections = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
 
-    constructor() {
-
-    }
+    constructor() { }
 
     moveKnight(start, end) {
         let traversed = new Set();
@@ -13,18 +11,25 @@ class KnightsTravails {
         traversed.add(`[${queue[0][0]}, ${queue[0][1]}]`);
 
         while (queue.length != 0) {
-            if (queue[0][0] == end[0] && queue[0][1] == end[1]) return steps;
+            let stepQueue = [];
 
-            for (let step of this.#stepDirections) {
-                let next = [(queue[0][0] + step[0]), (queue[0][1] + step[1])];
+            while (queue.length != 0) {
+                if (queue[0][0] == end[0] && queue[0][1] == end[1]) return steps;
 
-                if (!traversed.has(`[${next[0]}, ${next[1]}]`)) {
-                    traversed.add(`[${next[0]}, ${next[1]}]`);
-                    queue.push(next);
+                for (let step of this.#stepDirections) {
+                    let next = [(queue[0][0] + step[0]), (queue[0][1] + step[1])];
+
+                    if (!traversed.has(`[${next[0]}, ${next[1]}]`)) {
+                        traversed.add(`[${next[0]}, ${next[1]}]`);
+                        stepQueue.push(next);
+                    }
                 }
+
+                queue.shift();
             }
 
-            queue.shift();
+            queue = stepQueue;
+            steps++;
         }
 
         return steps;
