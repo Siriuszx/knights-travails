@@ -1,16 +1,18 @@
 import Knight from "./Knight.js";
 
 class KnightsTravails {
+    #boardWidth = 8;
+    #boardHeight = 8;
+
+    #traversed = new Set();
     #stepDirections = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
 
     constructor() { }
 
     moveKnight(start, end) {
-        let traversed = new Set();
         let queue = [new Knight([[start[0], start[1]]])];
-        let steps = 0;
 
-        traversed.add(`[${queue[0].current[0]}, ${queue[0].current[1]}]`);
+        this.#traversed.add(`[${queue[0].current[0]}, ${queue[0].current[1]}]`);
 
         while (queue.length != 0) {
             let stepQueue = [];
@@ -21,18 +23,27 @@ class KnightsTravails {
                 for (let step of this.#stepDirections) {
                     let next = [(queue[0].current[0] + step[0]), (queue[0].current[1] + step[1])];
 
-                    if (!traversed.has(`[${next[0]}, ${next[1]}]`)) {
-                        traversed.add(`[${next[0]}, ${next[1]}]`);
-                        stepQueue.push(new Knight(queue[0].copySteps(next)));
+                    if (this.canMove(next)) {
+                        this.#traversed.add(`[${next[0]}, ${next[1]}]`);
+                        stepQueue.push(new Knight(queue[0].getPushCopy(next)));
                     }
                 }
 
                 queue.shift();
             }
+
             queue = stepQueue;
         }
 
         return [];
+    }
+
+    canMove(step) {
+        if ((step[0] < 0) || (step[0] > this.#boardWidth - 1)) return false;
+        if ((step[1] < 0) || (step[1] > this.#boardHeight - 1)) return false;
+        if (this.#traversed.has(`[${step[0]}, ${step[1]}]`)) return false;
+
+        return true;
     }
 }
 

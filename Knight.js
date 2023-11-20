@@ -5,7 +5,7 @@ class Knight {
         this.stepList = stepList;
     }
 
-    copySteps(step) {
+    getPushCopy(step) {
         let copy = this.stepList.slice();
         copy.push(step);
         return copy;
